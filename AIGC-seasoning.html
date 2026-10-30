@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f6ef">
+<meta name="description" content="给同人创作加一点新鲜滋味。独立调配剧情风格与叙事手法，一键生成与复制，单文件离线使用。">
+<title>AIGC 同人创作 · 调味包生成器</title>
+<style>
+:root{--bg:#f9f6ef;--ink:#343e39;--muted:#7b8179;--line:#e7e7dd;--green:#527963;--dark:#365b46;--pink:#f4e3de;--sage:#e7eee3;--rose:#b46c60;--white:#fffefa;--shadow:0 12px 36px #454d3410;font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button,a,input,summary{ -webkit-tap-highlight-color:transparent}button{cursor:pointer;border:0}button:disabled{cursor:default;opacity:.45}a{color:inherit;text-decoration:none}button,a,input,summary,textarea{outline-offset:5px}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--green)}button{transition:background .2s,transform .2s,box-shadow .2s}button:not(:disabled):active{transform:scale(.98)}.wrap{width:min(1120px,calc(100% - 64px));margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;height:90px;border-bottom:1px solid var(--line);gap:20px}.brand{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:650;letter-spacing:.5px}.brand-icon{display:grid;place-items:center;background:var(--green);color:#fff;border-radius:13px;width:38px;height:38px;font-size:26px}.navlinks{display:flex;align-items:center;gap:28px;font-size:13px}.navlinks a:hover{color:var(--green)}.offline{font-size:11px;border:1px solid #d8e2d3;border-radius:20px;padding:7px 11px;color:#608066;white-space:nowrap}.offline:before{content:'';display:inline-block;width:6px;height:6px;background:#7c9c73;border-radius:50%;margin-right:7px}
+.hero{position:relative;display:grid;grid-template-columns:1.3fr 1fr;align-items:center;padding:48px 10px 36px;gap:25px}.eyebrow{font-size:10px;letter-spacing:2.8px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:10px}.eyebrow:before{content:'';width:23px;height:1px;background:var(--green)}h1{font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;font-size:53px;font-weight:600;letter-spacing:3px;line-height:1.35;margin:18px 0 16px}h1 em{font-style:normal;color:var(--green);position:relative}h1 em:after{content:'';position:absolute;left:0;right:0;height:7px;background:#dfc5aa80;bottom:3px;border-radius:60%;z-index:-1}.hero p{font-size:13px;color:var(--muted);line-height:1.9;margin:0}.hero-art{height:260px;position:relative;display:grid;place-items:center}.hero-art svg{width:100%;max-width:390px;height:260px}.art-tag{position:absolute;bottom:23px;right:18px;transform:rotate(-7deg);background:#fffefa;border:1px solid #e4dfd2;padding:9px 17px;border-radius:5px;box-shadow:0 5px 12px #3e493508;color:#83765e;font-family:serif;font-size:12px}.section-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:8px 0 15px}.section-top h2{font-size:15px;font-weight:650;margin:0}.section-top h2 span{font-family:Georgia,serif;font-size:12px;margin-right:10px;color:#99a08f}.section-top p{font-size:11px;color:var(--muted);margin:0}.workspace{display:grid;grid-template-columns: .94fr 1.06fr;gap:22px;align-items:stretch}.panel{background:var(--white);border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow)}.controls{padding:27px}.mini-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px}.mini-heading h3{font-size:15px;margin:0}.mini-heading small{font-size:10px;color:var(--muted);letter-spacing:1.1px}.ingredient{border:1px solid #ebe7df;border-radius:15px;padding:19px 20px 14px;margin-bottom:15px;background:#fcf6f3}.ingredient.sage{background:#f4f7f0;border-color:#e7ebdf}.ingredient-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.ingredient-name{display:flex;gap:11px;align-items:center}.iconbox{width:34px;height:36px;background:#efdbd3;color:#ab7566;border-radius:10px;display:grid;place-items:center;font-size:19px}.sage .iconbox{background:#e3ead9;color:#6c835d}.ingredient h4{font-size:14px;margin:0 0 4px}.stock{font-size:10px;color:#929184}.dose{font-family:Georgia,serif;font-size:30px;color:#b37b6c;line-height:1}.sage .dose{color:#708362}.dose small{font:11px ui-sans-serif,sans-serif;margin-left:5px;color:var(--muted)}input[type=range]{display:block;width:100%;margin:23px 0 8px;appearance:none;-webkit-appearance:none;height:5px;background:linear-gradient(to right,var(--fill) 0 var(--percent),var(--track) var(--percent) 100%);border-radius:10px;cursor:pointer;--fill:#c38c7e;--track:#e7ddd5;--percent:33.333%}.sage input{--fill:#81936b;--track:#dce3d3}input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:var(--white);border:4px solid var(--fill);box-shadow:0 2px 5px #0001}input[type=range]::-moz-range-thumb{width:10px;height:10px;border:4px solid var(--fill);border-radius:50%;background:var(--white)}.scale{display:flex;justify-content:space-between;font-size:10px;color:#96968b;line-height:1.6;margin-top:13px}.hint{font-size:11px;line-height:1.7;color:var(--muted);margin:17px 0}.primary{background:var(--green);color:#fffefa;width:100%;border-radius:11px;padding:15px 18px;font-size:14px;font-weight:600;box-shadow:0 5px 12px #5279631a;display:flex;align-items:center;justify-content:center;gap:10px}.primary:hover{background:var(--dark);box-shadow:0 6px 14px #365b4626}.primary .arrow{margin-left:auto}.primary .button-label{margin:auto 0}.text-btn{background:transparent;color:var(--green);font-size:11px;padding:8px 0}.browse-row{text-align:center;margin-top:8px}.text-btn:hover{text-decoration:underline}.result{padding:27px;position:relative;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(145deg,#fffefa,#fcfcf5)}.result:after{content:'';position:absolute;top:0;left:25px;right:25px;height:4px;background:repeating-linear-gradient(90deg,#dfe8d5 0 16px,transparent 16px 24px);border-radius:0 0 5px 5px}.recipe-num{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:1px;color:#969d90}.result .mini-heading{margin-bottom:17px}.result-body{flex:1;min-height:265px}.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:265px;text-align:center;color:var(--muted)}.empty-symbol{width:70px;height:70px;background:#f0f3e9;border:1px dashed #ccd6be;border-radius:50%;display:grid;place-items:center;color:#8da37e;font-size:35px;margin-bottom:17px}.empty h4{font-size:15px;font-weight:500;color:#687a61;margin:0 0 10px}.empty p{font-size:12px;line-height:1.9;margin:0}.result-group{margin:10px 0 22px}.result-label{display:flex;align-items:center;gap:8px;font-size:11px;color:#9a7e71;margin:0 0 12px}.result-label:before{content:'';width:6px;height:6px;border-radius:50%;background:#c89383}.result-group:nth-child(2) .result-label{color:#73866a}.result-group:nth-child(2) .result-label:before{background:#8ca17a}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{display:block;border:1px solid #ebdcd3;background:#faf0e9;color:#916858;padding:8px 9px;font-size:12px;line-height:1.7;border-radius:8px;overflow-wrap:anywhere;animation:rise .3s both}.result-group:nth-child(2) .chip{background:#edf2e7;border-color:#dfe7d5;color:#5e7650}.nothing{font-size:11px;color:#989b90;margin:0}.result-footer{border-top:1px dashed #dedfd2;padding-top:17px;margin-top:12px}.include{display:flex;align-items:center;gap:8px;font-size:11px;color:#7e8677;line-height:1.7;cursor:pointer}.include input{accent-color:var(--green);width:14px;height:14px;margin:0;flex-shrink:0}.secondary{width:100%;padding:13px;border:1px solid #cbd8c4;background:#f0f4e9;color:var(--dark);border-radius:10px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:550}.secondary:not(:disabled):hover{background:#e4edda}.result-note{font-size:10px;color:#909889;text-align:center;margin:10px 0 0}.result-meta{display:flex;justify-content:space-between;color:#a1a594;font-size:10px;margin:13px 0 0;gap:10px}.principles{margin-top:36px}.principles-intro{color:var(--muted);font-size:12px;line-height:1.8}.prefix-panel{padding:24px}.prefix-header{display:flex;justify-content:space-between;align-items:start;gap:15px;margin-bottom:13px}.prefix-header h3{font-size:14px;margin:0 0 7px}.prefix-header p{font-size:11px;color:var(--muted);margin:0;line-height:1.7}.copy-small{background:#edf1e6;border:1px solid #e0e6d5;padding:7px 11px;border-radius:7px;color:#627657;font-size:11px;white-space:nowrap}.copy-small:hover{background:#e1e9d6}textarea{background:#fafbf5;border:1px solid #e6e9dc;border-radius:10px;padding:14px;color:#69715f;line-height:1.95;font-size:12px;width:100%;display:block;resize:vertical;min-height:75px}textarea[readonly]{cursor:text}#all-prefix{height:180px}.prefix-options{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}.copy-unit{border:1px solid #e7e8df;border-radius:12px;padding:15px;background:#fffefa;min-width:0}.copy-unit header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}.copy-unit h4{font-size:12px;margin:0;font-weight:550}.copy-unit textarea{height:105px}.rules-details{margin-top:18px;border-top:1px solid var(--line);padding-top:17px}.rules-details summary{font-size:12px;color:var(--green);cursor:pointer;padding:3px 0}.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.relax{margin-top:15px;background:#f7f0e9;border-color:#e9ddd0}.relax textarea{background:#fffaf3;border-color:#e9e0d3;height:62px;min-height:62px}.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--line);margin-top:36px;padding:25px 0 35px;font-size:10px;color:#92978b;letter-spacing:.5px}.footer span:first-child{font-family:Georgia,serif;letter-spacing:1px}.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,20px);background:#354a3e;color:#fff;padding:13px 23px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;z-index:30;transition:.25s;box-shadow:0 8px 28px #0002;max-width:calc(100% - 36px);width:max-content}.toast.show{opacity:1;transform:translate(-50%,0)}dialog{border:1px solid var(--line);border-radius:20px;padding:25px;width:min(680px,calc(100% - 30px));max-height:85vh;background:var(--bg);color:var(--ink);box-shadow:0 20px 70px #0002}dialog::backdrop{background:#283a3070;backdrop-filter:blur(4px)}.dialog-top{display:flex;justify-content:space-between;align-items:center;gap:15px}.dialog-top h2{font-size:18px;margin:0}.close{background:#eaece1;border-radius:50%;width:32px;height:32px;font-size:21px;color:#73806a}.dialog-note{font-size:12px;color:var(--muted);line-height:1.8}.search{width:100%;background:#fffefa;border:1px solid #dbe1d0;padding:12px 14px;border-radius:10px;color:var(--ink);margin:8px 0 17px}.library-category{margin-bottom:13px;border:1px solid var(--line);border-radius:10px;background:var(--white);padding:12px 14px}.library-category summary{font-size:12px;cursor:pointer;line-height:1.6}.library-category .chips{margin-top:12px}.library-category .chip{font-size:11px;color:#69715f;background:#f4f5eb;border-color:#e6e9d9;animation:none}.library-section{font-size:14px;color:var(--green);margin:15px 0}.modal-copy{max-height:50vh;min-height:180px}.modal-copy-button{margin-top:14px}.search-empty{font-size:13px;color:var(--muted);padding:15px 0}[hidden]{display:none!important}@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(min-width:1300px){.hero{padding-top:58px;padding-bottom:48px}}@media(max-width:800px){.wrap{width:calc(100% - 36px)}.nav{height:76px}.brand{font-size:12px;letter-spacing:0;gap:8px}.brand-icon{width:32px;height:32px;border-radius:10px}.navlinks{gap:16px}.navlinks a{display:none}.hero{padding:30px 0;gap:0;grid-template-columns:1.2fr 1fr}h1{font-size:38px;letter-spacing:1px}.hero-art{height:200px}.hero-art svg{height:200px}.art-tag{font-size:10px;bottom:5px;right:5px}.hero p{font-size:12px}.eyebrow{font-size:8px;letter-spacing:1.6px}.workspace{gap:15px;grid-template-columns:1fr 1fr}.controls,.result{padding:20px}.ingredient{padding:17px 14px}.ingredient h4{font-size:12px}.iconbox{display:none}.result-body,.empty{min-height:285px}}@media(max-width:590px){.wrap{width:calc(100% - 32px)}.brand{max-width:230px;font-size:11px}.offline{font-size:9px;padding:6px 8px}.hero{grid-template-columns:1fr;padding:31px 3px 28px}.hero-art{position:absolute;right:-10px;top:48px;width:125px;height:140px;opacity:.55;z-index:-1}.hero-art svg{height:140px}.art-tag{display:none}h1{font-size:41px;margin-top:14px}.hero p{max-width:270px;font-size:11px}.section-top h2{font-size:14px}.section-top p{font-size:10px}.workspace{grid-template-columns:1fr;gap:16px}.controls,.result{padding:23px}.iconbox{display:grid}.ingredient h4{font-size:14px}.hint{font-size:11px}.result-body,.empty{min-height:210px}.result .mini-heading{margin-bottom:14px}.prefix-panel{padding:18px}.prefix-header{align-items:center}.prefix-header p{font-size:10px}.prefix-options,.unit-grid{grid-template-columns:1fr}.copy-unit textarea{height:95px}.principles{margin-top:28px}.footer{align-items:start;line-height:1.8;font-size:9px}.footer span:last-child{text-align:right}.toast{font-size:12px}.mini-heading small{font-size:9px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav" aria-label="主导航"><a class="brand" href="#"><span class="brand-icon" aria-hidden="true">✳</span><span>AIGC 同人创作 · 调味包生成器</span></a><div class="navlinks"><a href="#principles">使用原则</a><span class="offline">离线可用 · 灵感随行</span></div></nav>
+<main>
+<header class="hero"><div><div class="eyebrow">A LITTLE SEASONING, A NEW STORY</div><h1>灵感，调到<br><em>刚刚好。</em></h1><p>一点剧情风味，一点叙事巧思。<br>轻轻一拌，为熟悉的角色调出新鲜的故事。</p></div>
+<div class="hero-art" aria-hidden="true"><svg viewBox="0 0 390 260" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="201" cy="225" rx="138" ry="12" fill="#E9E8DB"/><circle cx="207" cy="130" r="100" fill="#EFF0E5"/><path d="M80 129c-9-4-13-14-7-22m5 12c-11-1-15-7-14-15m17 13c3-12-1-18-7-20" stroke="#90A17B" stroke-width="3" stroke-linecap="round"/><g transform="rotate(-12 137 149)"><rect x="98" y="96" width="78" height="119" rx="18" fill="#EAC2B0" stroke="#B98B75" stroke-width="1.6"/><rect x="104" y="96" width="66" height="111" rx="13" fill="#F7DFCC"/><rect x="99" y="82" width="76" height="24" rx="6" fill="#83A080" stroke="#698768" stroke-width="1.5"/><path d="M110 86v15m12-15v15m12-15v15m12-15v15m12-15v15m10-15v15" stroke="#698768"/><rect x="109" y="129" width="55" height="53" rx="3" fill="#FFFAEC"/><path d="M123 150c0-9 14-13 18-3 5-10 16-4 14 4-2 9-17 16-17 16s-16-10-15-17" fill="#D29A85"/><circle cx="117" cy="196" r="2" fill="#C89176"/><circle cx="153" cy="191" r="2" fill="#C89176"/><circle cx="141" cy="201" r="2" fill="#C89176"/></g><g transform="rotate(11 231 152)"><rect x="196" y="113" width="72" height="102" rx="16" fill="#B5C39B" stroke="#82956A" stroke-width="1.6"/><rect x="202" y="115" width="59" height="92" rx="11" fill="#D5DEBA"/><rect x="195" y="99" width="75" height="24" rx="6" fill="#DAAC90" stroke="#BA9174" stroke-width="1.5"/><path d="M205 103v15m11-15v15m11-15v15m11-15v15m11-15v15m11-15v15" stroke="#BA9174"/><rect x="207" y="142" width="49" height="45" rx="3" fill="#FFFAEC"/><path d="m231 150 3 9 9 3-9 3-3 9-3-9-9-3 9-3 3-9Z" fill="#8B9D72"/><circle cx="218" cy="198" r="2" fill="#8CA175"/><circle cx="249" cy="196" r="2" fill="#8CA175"/></g><path d="m194 43 3 11 11 3-11 3-3 11-3-11-11-3 11-3 3-11Z" fill="#D1B186"/><path d="m301 119 2 7 7 2-7 2-2 7-2-7-7-2 7-2 2-7Z" fill="#A6B18B"/><circle cx="166" cy="64" r="3" fill="#CFA892"/><circle cx="280" cy="83" r="3" fill="#B1BA97"/><path d="m212 85 6-7m7 14 9-2" stroke="#A5B38A" stroke-width="2.5" stroke-linecap="round"/><path d="M283 174c21-3 30 8 21 17-8 8-19 8-20-1-1-9 19-14 29-9" stroke="#9AA781" stroke-width="2" stroke-linecap="round"/><path d="m308 171 5 10-10 3" stroke="#9AA781" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="art-tag">今日份灵感 · 随心调配</span></div></header>
+<div class="section-top"><h2><span>01 /</span>你的灵感料理台</h2><p>调节分量 → 随机调配 → 复制开写</p></div>
+<section class="workspace" aria-label="调味包生成器">
+<div class="panel controls"><div class="mini-heading"><h3>选择你的配方</h3><small>MAKE IT YOURS</small></div>
+<div class="ingredient"><div class="ingredient-top"><div class="ingredient-name"><span class="iconbox" aria-hidden="true">♧</span><div><h4><label for="plot-count">剧情风格</label></h4><div class="stock" id="plot-stock"></div></div></div><div class="dose"><output for="plot-count" id="plot-value">2</output><small>勺</small></div></div><input type="range" id="plot-count" min="0" max="6" value="2" step="1" aria-describedby="plot-stock"><div class="scale" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></div>
+<div class="ingredient sage"><div class="ingredient-top"><div class="ingredient-name"><span class="iconbox" aria-hidden="true">✧</span><div><h4><label for="narrative-count">叙事／修辞手法</label></h4><div class="stock" id="narrative-stock"></div></div></div><div class="dose"><output for="narrative-count" id="narrative-value">3</output><small>勺</small></div></div><input type="range" id="narrative-count" min="0" max="6" value="3" step="1" aria-describedby="narrative-stock"><div class="scale" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></div>
+<p class="hint">✧ 每类独立抽取，不重复。少一点也很有味道。</p><button type="button" class="primary" id="generate"><span aria-hidden="true">✳</span><span class="button-label">调配一份灵感</span><span class="arrow" aria-hidden="true">↗</span></button><div class="browse-row"><button type="button" class="text-btn" id="browse">查看全部调料 <span id="total-count"></span> ↗</button></div></div>
+<div class="panel result"><div class="mini-heading"><h3>新鲜出炉的调味包</h3><span id="recipe-number" class="recipe-num">RECIPE / —</span></div><div class="result-body" id="result" aria-live="polite" aria-atomic="true"><div class="empty"><div class="empty-symbol" aria-hidden="true">✧</div><h4>故事的下一种滋味，等你调配</h4><p>选好分量，点击左侧按钮。<br>让一点随机，带来一点惊喜。</p></div></div><div class="result-footer"><label class="include"><input type="checkbox" id="include-principles">复制时附带完整前置文本（用途、方法与原则）</label><button type="button" class="secondary" id="copy-result" disabled><span aria-hidden="true">▢</span> 一键复制调味包</button><p class="result-note" id="result-note">保留原始括号格式，可直接粘贴到提示词</p><div class="result-meta"><span>角色不变，表达有新意</span><span id="selected-total">等待调配 · 0 项</span></div></div></div>
+</section>
+<section class="principles" id="principles"><div class="section-top"><h2><span>02 /</span>使用原则 · 创作的底味</h2><p>整段带走，或按需取用</p></div><div class="panel prefix-panel"><div class="prefix-header"><div><h3>给 AI 的前置文本</h3><p>用途、使用方法、八条原则与放松提醒，完整保留。</p></div><button type="button" class="copy-small" id="copy-prefix">复制全部 ↗</button></div><label for="all-prefix" class="sr-label" hidden>完整前置文本</label><textarea id="all-prefix" readonly aria-label="完整前置文本"></textarea><div id="intro-units" class="prefix-options"></div><details class="rules-details"><summary>展开 8 条使用原则 · 每条均可单独复制</summary><div class="unit-grid" id="rule-units"></div></details><div id="relax-unit"></div></div></section>
+</main><footer class="footer"><span>A LITTLE SEASONING, ENDLESS POSSIBILITIES.</span><span>保持角色的本味，让创作多一点自由。<br>原生单文件 · 无网络依赖</span></footer></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="library-dialog" aria-labelledby="library-title"><div class="dialog-top"><h2 id="library-title">灵感调料库</h2><button type="button" class="close" data-close="library-dialog" aria-label="关闭调料库">×</button></div><p class="dialog-note">仅收录你提供的词条。按原分类浏览，或搜索一种想要的味道。</p><input type="search" class="search" id="library-search" placeholder="搜索词条或分类…" aria-label="搜索词条或分类"><div id="library-content"></div></dialog>
+<dialog id="copy-dialog" aria-labelledby="copy-title"><div class="dialog-top"><h2 id="copy-title">选中文字，即可带走</h2><button type="button" class="close" data-close="copy-dialog" aria-label="关闭复制窗口">×</button></div><p class="dialog-note">浏览器未允许自动复制。已为你选中文字，请按 Ctrl / ⌘ + C，或长按复制。</p><textarea class="modal-copy" id="manual-copy" readonly aria-label="手动复制的文本"></textarea><button type="button" class="secondary modal-copy-button" id="select-copy">重新全选文字</button></dialog>
+<script>
+'use strict';
+/* ==================== 可修改词库 ====================
+ * 两个独立的 JavaScript 数组。每个对象对应原始分类。
+ * 修改 items 数组即可增删词条；字符串原样展示、复制，不自动补括号。
+ * 不新增词条时，保留 [] 即可；空库及不足 6 条的词库也可使用。
+ */
+const PLOT_STYLES = [
+  {
+    "name": "喜剧与抽象系",
+    "items": [
+      "（比较神经的剧情）",
+      "（有趣的剧情）",
+      "（逆天的剧情）",
+      "（抽象的剧情）",
+      "（无厘头的剧情）",
+      "（荒诞的剧情）",
+      "（一本正经地胡说八道的剧情）",
+      "（冷幽默的剧情）",
+      "（反差喜剧的剧情）",
+      "（误会不断的剧情）",
+      "（谣言失控的剧情）",
+      "（打破第四面墙的剧情）",
+      "（黑色幽默的剧情）",
+      "（逐渐离谱的剧情）",
+      "（小题大做的剧情）",
+      "（恶作剧翻车的剧情）"
+    ]
+  },
+  {
+    "name": "温馨与治愈系",
+    "items": [
+      "（温馨的剧情）",
+      "（治愈的剧情）",
+      "（甜甜的剧情）",
+      "（软乎乎的剧情）",
+      "（慵懒的剧情）",
+      "（轻松惬意的剧情）",
+      "（充满生活气息的剧情）",
+      "（细水长流的剧情）",
+      "（陪伴感强的剧情）",
+      "（令人会心一笑的剧情）",
+      "（温柔细腻的剧情）"
+    ]
+  },
+  {
+    "name": "青春与日常系",
+    "items": [
+      "（青春洋溢的剧情）",
+      "（校园日常的剧情）",
+      "（宿舍生活的剧情）",
+      "（少女感十足的剧情）",
+      "（自由随性的剧情）",
+      "（充满烟火气的剧情）",
+      "（朋友间打闹的剧情）",
+      "（即兴旅行的剧情）",
+      "（充满意外惊喜的剧情）",
+      "（平淡却有趣的剧情）",
+      "（群像互动的剧情）"
+    ]
+  },
+  {
+    "name": "情感与文学系",
+    "items": [
+      "（细腻动人的剧情）",
+      "（感人至深的剧情）",
+      "（略带忧伤的剧情）",
+      "（苦中带甜的剧情）",
+      "（ bittersweet（苦乐参半）的剧情）",
+      "（诗意的剧情）",
+      "（浪漫的剧情）",
+      "（怀旧的剧情）",
+      "（令人怅然若失的剧情）",
+      "（情绪克制的剧情）",
+      "（余韵悠长的剧情）",
+      "（关于成长的剧情）",
+      "（关于回忆的剧情）",
+      "（关于离别的剧情）",
+      "（关于人生的剧情）",
+      "（纯粹的虐心剧情) "
+    ]
+  },
+  {
+    "name": "悬疑与冒险系",
+    "items": [
+      "（神秘的剧情）",
+      "（悬疑的剧情）",
+      "（怪谈风格的剧情）",
+      "（都市传说的剧情）",
+      "（充满探索欲的剧情）",
+      "（紧张刺激的剧情）",
+      "（轻微惊悚的剧情）",
+      "（充满未知感的剧情）",
+      "（奇幻冒险的剧情）",
+      "（层层反转的剧情）",
+      "（出乎意料的剧情）"
+    ]
+  },
+  {
+    "name": "实验与特殊叙事系",
+    "items": [
+      "（电影感十足的剧情）",
+      "（意识流的剧情）",
+      "（梦境般的剧情）",
+      "（超现实的剧情）",
+      "（戏剧化的剧情）",
+      "（非线性叙事的剧情）",
+      "（留白丰富的剧情）",
+      "（舞台剧式的剧情）",
+      "（聊天记录体的剧情）",
+      "（论坛体的剧情）",
+      "（伪纪录片式的剧情）",
+      "（多视角的剧情）",
+      "（开放式结局的剧情）",
+      "（极其短小精悍的剧情）",
+      "（极其短小精悍但包含前因后果的剧情）",
+      "（角色厨发电剧情💗）"
+    ]
+  }
+];
+const NARRATIVE_TECHNIQUES = [
+  {
+    "name": "修辞手法 · 语言表现 / 比喻与联想",
+    "items": [
+      "（巧妙运用比喻的叙事）",
+      "（运用新奇比喻的叙事）",
+      "（运用荒诞比喻的叙事）",
+      "（运用拟人化修辞的叙事）",
+      "（运用通感修辞的叙事）",
+      "（充满奇妙联想的叙事）",
+      "（以具体意象表现抽象情绪的叙事）",
+      "（运用象征手法的叙事）",
+      "（运用反复出现的意象形成呼应的叙事）"
+    ]
+  },
+  {
+    "name": "修辞手法 · 语言表现 / 反差与讽刺",
+    "items": [
+      "（运用反讽的叙事）",
+      "（运用夸张修辞的叙事）",
+      "（运用极端夸张制造喜剧效果的叙事）",
+      "（运用轻描淡写制造反差的叙事）",
+      "（运用一本正经的语言描写荒谬事件的叙事）",
+      "（运用荒谬逻辑讽刺现实的叙事）",
+      "（运用庄严措辞描述琐碎小事的叙事）",
+      "（运用贬词褒用与褒词贬用的叙事）",
+      "（利用预期落差制造笑点的叙事）",
+      "（运用字面意义与引申意义错位的叙事）"
+    ]
+  },
+  {
+    "name": "修辞手法 · 语言表现 / 节奏与句式",
+    "items": [
+      "（长短句交错的叙事）",
+      "（短句密集、节奏明快的叙事）",
+      "（语言简洁有力的叙事）",
+      "（运用排比增强节奏的叙事）",
+      "（运用反复制造喜剧效果的叙事）",
+      "（运用递进句式逐步升级荒谬程度的叙事）",
+      "（运用突然中断制造喜剧效果的叙事）",
+      "（运用设问与反问的叙事）",
+      "（运用句式对称与前后呼应的叙事）",
+      "（富有音乐性与韵律感的叙事）"
+    ]
+  },
+  {
+    "name": "修辞手法 · 语言表现 / 含蓄与情绪",
+    "items": [
+      "（运用留白的叙事）",
+      "（运用含蓄表达的叙事）",
+      "（以细节代替直接抒情的叙事）",
+      "（运用环境烘托情绪的叙事）",
+      "（运用动作与神态暗示心理的叙事）",
+      "（以平静语言表现强烈情感的叙事）",
+      "（运用言外之意的叙事）",
+      "（带有诗意但不过度抒情的叙事）",
+      "（克制而富有感染力的叙事）",
+      "（以生活化语言呈现细腻情感的叙事）"
+    ]
+  },
+  {
+    "name": "叙事手法 · 视角与信息 / 叙述视角",
+    "items": [
+      "（第一人称叙事）",
+      "（第三人称有限视角叙事）",
+      "（第三人称全知视角叙事）",
+      "（多视角交替叙事）",
+      "（不可靠叙述者叙事）",
+      "（旁观者视角叙事）",
+      "（局外人误解事件的叙事）",
+      "（从普通物品视角展开的叙事）",
+      "（以角色内心独白推动的叙事）",
+      "（自由间接引语风格的叙事）"
+    ]
+  },
+  {
+    "name": "叙事手法 · 视角与信息 / 时间与结构",
+    "items": [
+      "（线性叙事）",
+      "（倒叙叙事）",
+      "（插叙叙事）",
+      "（非线性叙事）",
+      "（多条时间线交错的叙事）",
+      "（首尾呼应的叙事）",
+      "（环形结构叙事）",
+      "（倒置因果顺序的叙事）",
+      "（从结局开始讲述的叙事）",
+      "（同一事件多次重述的叙事）",
+      "（以重复场景呈现细微变化的叙事）"
+    ]
+  },
+  {
+    "name": "叙事手法 · 视角与信息 / 信息与悬念",
+    "items": [
+      "（逐步揭示真相的叙事）",
+      "（信息差驱动的叙事）",
+      "（读者知情而角色不知情的叙事）",
+      "（角色知情而读者不知情的叙事）",
+      "（制造错误预期的叙事）",
+      "（运用伏笔与回收的叙事）",
+      "（通过细节埋藏线索的叙事）",
+      "（多重误会交织的叙事）",
+      "（层层反转的叙事）",
+      "（开放式结局的叙事）",
+      "（结尾突然揭示关键事实的叙事）"
+    ]
+  },
+  {
+    "name": "喜剧叙事 · 笑点构造 / 荒诞升级",
+    "items": [
+      "（小事逐渐失控的叙事）",
+      "（荒谬程度不断升级的叙事）",
+      "（角色认真执行荒唐规则的叙事）",
+      "（荒唐前提被所有人理所当然接受的叙事）",
+      "（正常人物被荒谬环境逼疯的叙事）",
+      "（利用逻辑漏洞制造笑点的叙事）",
+      "（错误结论被不断合理化的叙事）",
+      "（解决一个问题却制造更多问题的叙事）",
+      "（为微不足道的事件启动庞大程序的叙事）",
+      "（以极不合理的手段达成合理目标的叙事）",
+      "（反转的喜剧化叙事）"
+    ]
+  },
+  {
+    "name": "喜剧叙事 · 笑点构造 / 对话喜剧",
+    "items": [
+      "（高密度机智对话的叙事）",
+      "（吐槽与反吐槽交替的叙事）",
+      "（角色一本正经地接住荒唐话题的叙事）",
+      "（利用答非所问制造笑点的叙事）",
+      "（利用语义歧义制造误会的叙事）",
+      "（利用字面理解制造喜剧效果的叙事）",
+      "（角色之间互相拆台的叙事）",
+      "（冷幽默与热烈吐槽形成反差的叙事）",
+      "（让角色通过对话自然制造笑点的叙事）",
+      "（利用停顿与沉默制造笑点的叙事）"
+    ]
+  },
+  {
+    "name": "喜剧叙事 · 笑点构造 / 反转与回调",
+    "items": [
+      "（铺垫后突然反高潮的叙事）",
+      "（结尾回收开头笑点的叙事）",
+      "（反复出现并不断升级的笑点）",
+      "（严肃铺垫后以琐碎现实收尾的叙事）",
+      "（让看似无关的细节成为最终笑点的叙事）",
+      "（角色试图避免某件事却促成其发生的叙事）",
+      "（利用身份错位制造喜剧效果的叙事）",
+      "（角色自以为占优却被反将一军的叙事）",
+      "（预期中的大事件最终被小问题打断的叙事）"
+    ]
+  },
+  {
+    "name": "元叙事 · 第四面墙与自我指涉",
+    "items": [
+      "（打破第四面墙的叙事）",
+      "（角色意识到自己身处故事中的叙事）",
+      "（角色与旁白直接对话的叙事）",
+      "（角色质疑作者安排的叙事）",
+      "（旁白被角色当场纠正的叙事）",
+      "（角色试图修改剧情发展的叙事）",
+      "（人物档案成为故事道具的叙事）",
+      "（角色拒绝按照既定人设行动的叙事）",
+      "（角色利用故事结构反击作者的叙事）",
+      "（角色察觉剧情套路并主动规避的叙事）",
+      "（旁白本身成为不可靠叙述者的叙事）",
+      "（作者与角色争夺叙事控制权的叙事）",
+      "（故事中的角色发现提示词的叙事）",
+      "（角色意识到自己正在被AI生成的叙事）",
+      "（虚构世界与叙述层级发生错位的叙事）"
+    ]
+  },
+  {
+    "name": "特殊文本形式 · 叙事载体",
+    "items": [
+      "（论坛帖形式的叙事）",
+      "（群聊记录形式的叙事）",
+      "（私人日记形式的叙事）",
+      "（书信形式的叙事）",
+      "（采访实录形式的叙事）",
+      "（伪纪录片形式的叙事）",
+      "（官方通告形式的叙事）",
+      "（调查报告形式的叙事）",
+      "（法庭庭审记录形式的叙事）",
+      "（新闻报道形式的叙事）",
+      "（监控录像记录形式的叙事）",
+      "（会议纪要形式的叙事）",
+      "（研究论文形式的叙事）",
+      "（实验日志形式的叙事）",
+      "（电影剧本形式的叙事）",
+      "（舞台剧形式的叙事）",
+      "（档案与正文交错的叙事）",
+      "（多种文本形式拼贴的叙事）"
+    ]
+  },
+  {
+    "name": "文学与电影化手法 / 场景表现",
+    "items": [
+      "（具有电影镜头感的叙事）",
+      "（运用特写镜头感突出细节的叙事）",
+      "（通过场景切换制造反差的叙事）",
+      "（运用蒙太奇的叙事）",
+      "（平行剪辑式叙事）",
+      "（慢镜头般突出关键瞬间的叙事）",
+      "（运用声音与画面错位的叙事）",
+      "（以空间调度展现人物关系的叙事）",
+      "（通过物件变化暗示时间流逝的叙事）"
+    ]
+  },
+  {
+    "name": "文学与电影化手法 / 文学实验",
+    "items": [
+      "（意识流叙事）",
+      "（碎片化叙事）",
+      "（超现实主义叙事）",
+      "（荒诞主义叙事）",
+      "（魔幻现实主义风格叙事）",
+      "（极简主义叙事）",
+      "（散文化叙事）",
+      "（寓言式叙事）",
+      "（互文性叙事）",
+      "（多重叙事层级交织的叙事）",
+      "（超短剧叙事）",
+      "（动作极其丰富的叙事）",
+      "（使用巨量表情包的叙事🍎🐰🐐🐕🌿❤️❤️❤️💀）",
+      "（视觉炫技向的叙事）（没有图片）"
+    ]
+  },
+  {
+    "name": "节奏控制 · 情节推进",
+    "items": [
+      "（慢节奏、重视生活细节的叙事）",
+      "（快节奏、连续抛出笑点的叙事）",
+      "（前期平静、后期失控的叙事）",
+      "（循序渐进积累情绪的叙事）",
+      "（通过连续误会推动发展的叙事）",
+      "（通过人物主动选择推动发展的叙事）",
+      "（对话主导的叙事）",
+      "（动作主导的叙事）",
+      "（场景与氛围主导的叙事）",
+      "（高潮后迅速收尾的叙事）",
+      "（高潮后留出情绪缓冲的叙事）",
+      "（用短暂沉默代替解释的叙事）",
+      "（结尾戛然而止的叙事）",
+      "（结尾保留余韵的叙事）"
+    ]
+  }
+];
+/* ==================== 前置文本 ==================== */
+const PURPOSE = '在不改变角色核心人格、既定关系与世界观的前提下，自由调整文章的语言表现、叙述方式、节奏、结构与艺术效果。';
+const METHOD = '从任意分类中选取若干词条，以括号形式添加在创作提示词中。多个词条可以自由组合，不要求同时使用全部类别。';
+const PRINCIPLES = [
+  "角色设定优先。修辞、视角与叙事结构只能改变表现方式，不能擅自改变人物本身。",
+  "组合优于堆砌。每次可以选择一项主导叙事手法，再加入两到四项辅助技巧。不要求机械执行所有词条。",
+  "修辞应服务于内容。不因指定比喻就每段强行加入比喻，不因指定诗意就堆砌华丽辞藻。",
+  "人物反应应当自然。不为了制造笑点让聪明角色突然变笨，也不为了制造感动强迫角色说出不符合语感的台词。",
+  "允许偶然与变化。调料包负责确定写作倾向，不负责把所有事件提前固定成公式。",
+  "尊重叙事节奏。笑点需要铺垫，反转需要逻辑，情绪需要积累，留白不需要被旁白重新解释。",
+  "不强制主题升华。故事可以只因为有趣而存在。温馨不必说教，荒诞不必解释，结尾也不必附加总结性金句。",
+  "世界观保持稳定。即使采用夸张、荒诞或元叙事形式，也应当保留既有设定与角色关系；如需突破故事内部规则，应当是明确的叙事设计，而不是无意的设定错误。",
+  "请不要加入多余的、无用的旁白、解释和强制升华的结尾"
+];
+const RELAX = ['（无论如何，请保持放松，不要严肃）', '（自然融入剧情风格，不要刻意说明）'];
+const PREFIX_TEXT = '用途：'+PURPOSE+'\n\n使用方法：'+METHOD+'\n\n## 使用原则\n\n'+PRINCIPLES.join('\n\n')+'\n\n'+RELAX.join('\n');
+/* ==================== 程序逻辑 ==================== */
+const $ = id => document.getElementById(id);
+const uniqueItems = groups => [...new Set(groups.flatMap(g => g.items).filter(t => typeof t === 'string' && t.trim()))];
+const plotPool = uniqueItems(PLOT_STYLES), narrativePool = uniqueItems(NARRATIVE_TECHNIQUES);
+let current = null, recipeCount = 0, toastTimer;
+function notify(message){ clearTimeout(toastTimer); $('toast').textContent=message; $('toast').classList.add('show'); toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2800); }
+function syncSlider(name){ const input=$(name+'-count'); $(name+'-value').value=input.value; input.style.setProperty('--percent',(Number(input.value)/6*100)+'%'); if(current){$('result-note').textContent='分量已调整，点击“重新调配一份”更新结果';} }
+for(const [name,pool] of [['plot',plotPool],['narrative',narrativePool]]){ $(name+'-stock').textContent=pool.length+' 种风味 · 每次 0–6 勺'; $(name+'-count').addEventListener('input',()=>syncSlider(name)); syncSlider(name); }
+$('total-count').textContent='('+ (plotPool.length+narrativePool.length) +')';
+function sample(pool,count){ const shuffled=[...pool]; const size=Math.min(count,shuffled.length); for(let i=0;i<size;i++){const j=i+Math.floor(Math.random()*(shuffled.length-i)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];} return shuffled.slice(0,size); }
+function signature(value){return JSON.stringify([value.plot.slice().sort(),value.narrative.slice().sort()]);}
+function makeRecipe(plotCount,narrativeCount,previous){
+ const next={plot:sample(plotPool,plotCount),narrative:sample(narrativePool,narrativeCount)};
+ if(previous && signature(previous)===signature(next)){
+  // 在仍有其他组合可选时，强制替换一个词条，避免连续得到同一配方。
+  for(const [key,pool] of [['plot',plotPool],['narrative',narrativePool]]){
+   const unused=pool.filter(word=>!next[key].includes(word));
+   if(next[key].length && unused.length){next[key][Math.floor(Math.random()*next[key].length)]=unused[Math.floor(Math.random()*unused.length)]; break;}
+  }
+ }
+ return next;
+}
+function resultGroup(title,items){ const group=document.createElement('section'); group.className='result-group'; const label=document.createElement('h4');label.className='result-label'; label.textContent=title+' / '+items.length+' 项'; group.append(label); if(!items.length){const p=document.createElement('p');p.className='nothing';p.textContent='这一味，今天留白。';group.append(p);}else{const chips=document.createElement('div');chips.className='chips';items.forEach((word,i)=>{const chip=document.createElement('span');chip.className='chip';chip.textContent=word;chip.style.animationDelay=(i*25)+'ms';chips.append(chip);});group.append(chips);}return group; }
+function generate(){ const p=Number($('plot-count').value),n=Number($('narrative-count').value); current=makeRecipe(p,n,current); recipeCount++; $('recipe-number').textContent='RECIPE / '+String(recipeCount).padStart(3,'0');$('result').replaceChildren(resultGroup('剧情风格',current.plot),resultGroup('叙事／修辞手法',current.narrative)); const total=current.plot.length+current.narrative.length; $('selected-total').textContent='已调配 · '+total+' 项';$('generate').querySelector('.button-label').textContent='重新调配一份';$('copy-result').disabled=!total; if(total===0){$('result-note').textContent='本次没有加入调料。增加任一分量即可继续。';}else if(p>plotPool.length||n>narrativePool.length){$('result-note').textContent='部分词库数量不足，已抽取该库全部可用词条。';}else{$('result-note').textContent='保留原始括号格式，可直接粘贴到提示词';} }
+function getResultText(){ if(!current)return '';const parts=[];if($('include-principles').checked)parts.push(PREFIX_TEXT);if(current.plot.length)parts.push('剧情风格：\n'+current.plot.join('\n'));if(current.narrative.length)parts.push('叙事／修辞手法：\n'+current.narrative.join('\n'));return parts.join('\n\n'); }
+async function copyText(value){
+ if(!value)return;
+ try{ if(navigator.clipboard && navigator.clipboard.writeText){await navigator.clipboard.writeText(value);notify('已复制，去给故事加点新滋味。');return;} }catch(error){/* 本地文件或权限限制：继续兼容复制。 */}
+ const text=document.createElement('textarea');text.value=value;text.setAttribute('aria-label','复制临时文本');text.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;';document.body.append(text);const active=document.activeElement;let ok=false;try{text.focus();text.select();text.setSelectionRange(0,value.length);ok=document.execCommand('copy');}catch(error){}finally{text.remove();if(active&&active.focus)active.focus();}
+ if(ok){notify('已复制，去给故事加点新滋味。');return;}
+ $('manual-copy').value=value;$('copy-dialog').showModal();selectManual();
+}
+function selectManual(){$('manual-copy').focus();$('manual-copy').select();$('manual-copy').setSelectionRange(0,$('manual-copy').value.length);}
+$('select-copy').addEventListener('click',selectManual);
+$('generate').addEventListener('click',generate);$('copy-result').addEventListener('click',()=>copyText(getResultText()));$('copy-prefix').addEventListener('click',()=>copyText(PREFIX_TEXT));$('all-prefix').value=PREFIX_TEXT;
+function copyUnit(title,text,relax=false){const box=document.createElement('div');box.className='copy-unit'+(relax?' relax':'');const header=document.createElement('header'),h=document.createElement('h4'),button=document.createElement('button'),area=document.createElement('textarea');h.textContent=title;button.type='button';button.className='copy-small';button.textContent='复制';button.setAttribute('aria-label','复制'+title);button.addEventListener('click',()=>copyText(text));header.append(h,button);area.readOnly=true;area.value=text;area.setAttribute('aria-label',title+'文本');box.append(header,area);return box;}
+$('intro-units').append(copyUnit('用途','用途：'+PURPOSE),copyUnit('使用方法','使用方法：'+METHOD));PRINCIPLES.forEach((text,i)=>$('rule-units').append(copyUnit(String(i+1).padStart(2,'0')+' · '+text.split('。')[0],text)));$('relax-unit').append(copyUnit('最后，加一小撮轻松',RELAX,true));
+function renderLibrary(query=''){const content=$('library-content');content.replaceChildren();let total=0;query=query.trim().toLocaleLowerCase();for(const [title,groups] of [['剧情风格',PLOT_STYLES],['叙事／修辞手法',NARRATIVE_TECHNIQUES]]){let sections=[];groups.forEach(group=>{const items=group.items.filter(t=>!query||group.name.toLocaleLowerCase().includes(query)||t.toLocaleLowerCase().includes(query));if(!items.length)return;total+=items.length;const details=document.createElement('details'),summary=document.createElement('summary'),chips=document.createElement('div');details.className='library-category';details.open=Boolean(query);summary.textContent=group.name+' · '+items.length;chips.className='chips';items.forEach(t=>{const span=document.createElement('span');span.className='chip';span.textContent=t;chips.append(span);});details.append(summary,chips);sections.push(details);});if(sections.length){const h=document.createElement('h3');h.className='library-section';h.textContent=title;content.append(h,...sections);}}if(!total){const p=document.createElement('p');p.className='search-empty';p.textContent='没有找到这味调料，换个关键词试试。';content.append(p);}}
+$('browse').addEventListener('click',()=>{$('library-search').value='';renderLibrary();$('library-dialog').showModal();});$('library-search').addEventListener('input',event=>renderLibrary(event.target.value));document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>$(button.dataset.close).close()));document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();}}));
+</script>
+</body>
+</html>
